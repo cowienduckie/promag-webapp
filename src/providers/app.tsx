@@ -1,3 +1,4 @@
+import { StyleProvider } from '@ant-design/cssinjs';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Button, Spin } from 'antd';
 import * as React from 'react';
@@ -36,9 +37,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     >
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HelmetProvider>
-          <QueryClientProvider client={queryClient}>
-            <Router>{children}</Router>
-          </QueryClientProvider>
+          <StyleProvider hashPriority="high">
+            <QueryClientProvider client={queryClient}>
+              <Router>{children}</Router>
+            </QueryClientProvider>
+          </StyleProvider>
         </HelmetProvider>
       </ErrorBoundary>
     </React.Suspense>
