@@ -5,7 +5,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { AuthLoader } from '@/lib/auth';
 import { queryClient } from '@/lib/react-query';
 
 const ErrorFallback = () => {
@@ -38,12 +37,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HelmetProvider>
           <QueryClientProvider client={queryClient}>
-            <AuthLoader
-              renderLoading={() => <div>Loading ...</div>}
-              renderUnauthenticated={() => <div>Unauthenticated</div>}
-            >
-              <Router>{children}</Router>
-            </AuthLoader>
+            <Router>{children}</Router>
           </QueryClientProvider>
         </HelmetProvider>
       </ErrorBoundary>

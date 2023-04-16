@@ -1,14 +1,22 @@
-import { Suspense } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Link, Navigate, Outlet } from 'react-router-dom';
+
+import { AuthLoader } from '@/lib/auth';
 
 // TODO: Lazy import main components of features
 
 const App = () => {
   // TODO: put main layout below
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <AuthLoader
+      renderLoading={() => <div>Loading ...</div>}
+      renderUnauthenticated={() => (
+        <div>
+          Unauthenticated! <Link to="/auth/login">Go to Login page</Link>
+        </div>
+      )}
+    >
       <Outlet />
-    </Suspense>
+    </AuthLoader>
   );
 };
 
