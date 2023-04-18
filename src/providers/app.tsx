@@ -1,5 +1,6 @@
 import { StyleProvider } from '@ant-design/cssinjs';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Button, Spin } from 'antd';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -38,6 +39,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HelmetProvider>
           <StyleProvider hashPriority="high">
+            {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
             <QueryClientProvider client={queryClient}>
               <Router>{children}</Router>
             </QueryClientProvider>
