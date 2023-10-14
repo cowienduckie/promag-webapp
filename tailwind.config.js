@@ -1,10 +1,15 @@
-/** @type {import('tailwindcss').Config} */
-export default {
+import defaultTheme from 'tailwindcss/defaultTheme';
+
+module.exports = {
   important: true,
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'media',
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
+      }
+    }
   },
   plugins: []
 };

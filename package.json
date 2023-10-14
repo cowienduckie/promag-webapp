@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "prepare": "husky install && cp .env.example .env",
+    "prepare": "npx husky install && cp .env.example .env",
     "lint": "eslint --ext \".ts,.js,.tsx, .jsx\" --ignore-path .gitignore .",
     "lintfix": "eslint --fix --ext \".ts,.js,.tsx, .jsx\" --ignore-path .gitignore ."
   },

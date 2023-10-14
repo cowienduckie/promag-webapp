@@ -15,11 +15,7 @@ export const POLICIES = {
       return true;
     }
 
-    if (user.role === 'USER') {
-      return true;
-    }
-
-    return false;
+    return user.role === 'USER';
   }
 };
 

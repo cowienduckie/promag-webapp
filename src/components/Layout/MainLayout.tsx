@@ -1,9 +1,9 @@
 import { DesktopOutlined, PieChartOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
 import type { MenuProps } from 'antd';
+import { Layout, Menu, theme } from 'antd';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -31,6 +31,7 @@ const useMenuData = () => {
 };
 
 const { Content, Sider } = Layout;
+const { useToken } = theme;
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -40,7 +41,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer }
-  } = theme.useToken();
+  } = useToken();
 
   const { menuItems } = useMenuData();
   const location = useLocation();

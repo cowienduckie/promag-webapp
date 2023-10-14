@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { Head } from '@/components/Head';
 
-const welcomeText = 'Welcome to ProMag App';
+const welcomeText = 'WELCOME TO PROMAG APP!';
 
 export const Landing = () => {
   return (
@@ -13,13 +13,13 @@ export const Landing = () => {
       <Head title={welcomeText} description={welcomeText} />
       <div className={clsx('m-auto flex min-h-screen flex-col items-center justify-center')}>
         <h1 className={clsx('m-auto flex min-h-screen flex-col items-center justify-center')}>
-          {welcomeText}
+          <span className={clsx('my-2 text-3xl')}>{welcomeText}</span>
+          <Link to="/app">
+            <Button className={clsx('my-4')} type="primary" size="large">
+              Get Started <SendOutlined className={clsx('align-baseline')} />
+            </Button>
+          </Link>
         </h1>
-        <Link to="/app">
-          <Button type="primary" size="large">
-            Get Started <SendOutlined className={clsx('align-baseline')} />
-          </Button>
-        </Link>
       </div>
     </>
   );

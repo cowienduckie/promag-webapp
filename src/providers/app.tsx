@@ -1,12 +1,13 @@
 import { StyleProvider } from '@ant-design/cssinjs';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Button, Spin } from 'antd';
+import { Button } from 'antd';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { FullScreenLoading } from '@/components/Loading';
 import { queryClient } from '@/lib/react-query';
 
 const ErrorFallback = () => {
@@ -29,19 +30,13 @@ type AppProviderProps = {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <React.Suspense
-      fallback={
-        <div className="flex h-screen w-screen items-center justify-center">
-          <Spin size="large" />
-        </div>
-      }
-    >
+    <React.Suspense fallback={<FullScreenLoading />}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HelmetProvider>
           <StyleProvider hashPriority="high">
-            {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
             <QueryClientProvider client={queryClient}>
               <Router>{children}</Router>
+              {import.meta.env.DEV && <ReactQueryDevtools />}
             </QueryClientProvider>
           </StyleProvider>
         </HelmetProvider>
