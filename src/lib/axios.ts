@@ -1,20 +1,20 @@
 import Axios, { InternalAxiosRequestConfig } from 'axios';
 
-import { BASE_API_URL } from '@/config';
+import { WEB_APIGW_URL } from '@/config/environments';
+import Authentication from '@/lib/authentication';
 import { useNotificationStore } from '@/stores/notifications';
-import storage from '@/utils/storage';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
-  const token = storage.getToken();
-  if (token) {
-    config.headers.authorization = `${token}`;
-  }
+  const token = Authentication.getAccessToken();
+
+  config.headers.authorization = token ? `Bearer ${token}` : '';
   config.headers.Accept = 'application/json';
+
   return config;
 }
 
 export const axios = Axios.create({
-  baseURL: BASE_API_URL
+  baseURL: WEB_APIGW_URL
 });
 
 axios.interceptors.request.use(authRequestInterceptor);

@@ -2,8 +2,9 @@
 
 interface ImportMetaEnv {
   readonly VITE_APP_TITLE: string;
-  readonly VITE_BASE_API_URL: string;
-  readonly VITE_GRAPHQL_ENDPOINT: string;
+  readonly VITE_WEB_APIGW_URL: string;
+  readonly VITE_GRAPHQL_URL: string;
+  readonly VITE_IDENTITY_URL: string;
 }
 
 interface ImportMeta {

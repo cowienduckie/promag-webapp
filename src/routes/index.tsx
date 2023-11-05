@@ -1,11 +1,13 @@
-import { useRoutes } from 'react-router-dom';
+import { RouteObject, useRoutes } from 'react-router-dom';
 
-import { commonRoutes } from './common';
+import { publicRoutes } from '@/routes/public';
+
 import { protectedRoutes } from './protected';
-import { publicRoutes } from './public';
+
+export const routes: Array<RouteObject> = [...protectedRoutes, ...publicRoutes];
 
 export const AppRoutes = () => {
-  const element = useRoutes([...protectedRoutes, ...publicRoutes, ...commonRoutes]);
+  const element = useRoutes([...routes]);
 
   return <>{element}</>;
 };

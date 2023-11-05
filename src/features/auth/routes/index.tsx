@@ -1,25 +1,17 @@
-import { useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
-import { useUser } from '@/lib/auth';
+import { lazyImport } from '@/utils/lazyImport';
 
-import { Login } from './Login';
-import { Register } from './Register';
+const { Callback } = lazyImport(() => import('./Callback'), 'Callback');
+const { SilentCallback } = lazyImport(() => import('./SilentCallback'), 'SilentCallback');
+const { NotAuthenticated } = lazyImport(() => import('./NotAuthenticated'), 'NotAuthenticated');
 
 export const AuthRoutes = () => {
-  const navigate = useNavigate();
-  const user = useUser();
-
-  useEffect(() => {
-    if (user.data) {
-      navigate('/app');
-    }
-  }, [navigate, user]);
-
   return (
     <Routes>
-      <Route path="register" element={<Register />} />
-      <Route path="login" element={<Login />} />
+      <Route path="callback" element={<Callback />} />
+      <Route path="silent-callback" element={<SilentCallback />} />
+      <Route path="401" element={<NotAuthenticated />} />
     </Routes>
   );
 };

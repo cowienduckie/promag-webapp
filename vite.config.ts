@@ -1,16 +1,41 @@
 import path from 'path';
 
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-export default defineConfig({
-  server: {
-    port: 3000
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  },
-  plugins: [react()]
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+
+  return {
+    server: {
+      port: 3000,
+      proxy: {
+        '/authority': {
+          target: env.VITE_IDENTITY_URL || 'http://127.0.0.1:5101',
+          changeOrigin: true,
+          secure: true,
+          cors: {
+            sameOrigin: false
+          },
+          rewrite: (path) => path.replace(/^\/authority/, '')
+        },
+        '/graphql': {
+          target: env.VITE_GRAPHQL_URL || 'http://127.0.0.1:5100/graphql',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/graphql/, '')
+        },
+        '/web-apigw': {
+          target: env.VITE_WEB_APIGW_URL || 'http://127.0.0.1:5103',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/web-apigw/, '')
+        }
+      }
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src')
+      }
+    },
+    plugins: [react()]
+  };
 });
