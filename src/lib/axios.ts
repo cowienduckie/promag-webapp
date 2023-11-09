@@ -14,7 +14,7 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig) {
 }
 
 export const axios = Axios.create({
-  baseURL: WEB_APIGW_URL
+  baseURL: WEB_APIGW_URL // TODO: Change this to switch between GraphQL and RESTful api
 });
 
 axios.interceptors.request.use(authRequestInterceptor);

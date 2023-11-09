@@ -1,8 +1,8 @@
 import {
+  DefaultOptions,
   QueryClient,
-  UseQueryOptions,
   UseMutationOptions,
-  DefaultOptions
+  UseQueryOptions
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { PromiseValue } from 'type-fest';

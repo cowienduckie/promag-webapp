@@ -19,7 +19,10 @@ class AuthenticationService {
     if (!this.userManager || !this.userManager.getUser) {
       return '';
     }
-    return (await this.userManager.getUser())?.access_token ?? '';
+
+    const oidcUser = await this.userManager.getUser();
+
+    return oidcUser?.access_token ?? '';
   }
 
   async authenticateUser(location: Location) {

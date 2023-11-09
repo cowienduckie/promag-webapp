@@ -6,10 +6,6 @@ import { FullScreenLoading } from '@/components/Loading';
 import Authentication from '@/lib/authentication';
 import Logger from '@/utils/logger';
 
-interface state {
-  url: string;
-}
-
 export const Callback = () => {
   const navigate = useNavigate();
 
@@ -20,7 +16,7 @@ export const Callback = () => {
 
         Logger.info('Successful token callback');
 
-        navigate((user.state as state).url);
+        navigate(user.url_state as string);
       } catch (error) {
         Logger.error(`There was an error while handling the token callback: ${error}`);
         navigate('/auth/401');

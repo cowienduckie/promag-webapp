@@ -1,4 +1,4 @@
-import { DesktopOutlined, PieChartOutlined } from '@ant-design/icons';
+import { DesktopOutlined, LogoutOutlined, PieChartOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import clsx from 'clsx';
@@ -11,43 +11,47 @@ import Authentication from '@/lib/authentication';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-const getItem = (
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[]
-): MenuItem => {
-  return {
-    key,
-    icon,
-    children,
-    label
-  } as MenuItem;
-};
-
 const useMenuData = () => {
+  const getItem = (
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[]
+  ): MenuItem => {
+    return {
+      key,
+      icon,
+      children,
+      label
+    } as MenuItem;
+  };
+
   const menuItems: MenuItem[] = [
     getItem(<Link to="/app">Dashboard</Link>, '/app', <PieChartOutlined />),
     getItem(<Link to="/app/projects">Projects</Link>, '/app/projects', <DesktopOutlined />)
   ];
 
-  return { menuItems };
+  const profileItems: MenuItem[] = [
+    getItem(<Link to="/profile/me">Profile</Link>, '/profile/me', <UserOutlined />),
+    getItem(
+      <Link to="/" onClick={() => Authentication.signOut()}>
+        Sign Out
+      </Link>,
+      '/logout',
+      <LogoutOutlined />
+    )
+  ];
+
+  return { menuItems, profileItems };
 };
 
 const { Content, Sider } = Layout;
 const { useToken } = theme;
 
 export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer }
-  } = useToken();
-
-  const { menuItems } = useMenuData();
-  const location = useLocation();
-  const activeMenuItem = '/' + location.pathname.split('/').slice(1, 3).join('/');
-
+  // Authentication
   const { authenticated, access_token, updateToken } = useContext(AppContext);
+  const location = useLocation();
 
   useEffect(() => {
     if (!authenticated) {
@@ -61,6 +65,15 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       getToken();
     }
   }, [authenticated, location, access_token, updateToken]);
+
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer }
+  } = useToken();
+
+  // Menu
+  const { menuItems, profileItems } = useMenuData();
+  const activeMenuItem = '/' + location.pathname.split('/').slice(1, 3).join('/');
 
   return (
     <>
@@ -80,9 +93,10 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             />
             <Menu
               theme="dark"
-              className={clsx('bg-inherit pt-5')}
+              className={clsx('justify-self-end bg-inherit pt-5')}
               mode="inline"
-              selectedKeys={Array<string>()}
+              selectedKeys={Array<string>(activeMenuItem)}
+              items={profileItems}
             />
           </Sider>
           <Layout className={clsx('bg-inherit')}>
