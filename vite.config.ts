@@ -13,10 +13,6 @@ export default defineConfig(({ mode }) => {
         '/authority': {
           target: env.VITE_IDENTITY_URL || 'http://127.0.0.1:5101',
           changeOrigin: true,
-          secure: true,
-          cors: {
-            sameOrigin: false
-          },
           rewrite: (path) => path.replace(/^\/authority/, '')
         },
         '/graphql': {
