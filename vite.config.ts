@@ -11,8 +11,12 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       proxy: {
         '/authority': {
-          target: env.VITE_IDENTITY_URL || 'https://id.promag.minhtrandev.com',
+          target: env.VITE_IDENTITY_URL || 'http://127.0.0.1:5101',
           changeOrigin: true,
+          secure: true,
+          cors: {
+            sameOrigin: false
+          },
           rewrite: (path) => path.replace(/^\/authority/, '')
         },
         '/graphql': {
