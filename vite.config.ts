@@ -1,4 +1,3 @@
-import http from 'https';
 import path from 'path';
 
 import react from '@vitejs/plugin-react';
@@ -12,12 +11,10 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       https: true,
       proxy: {
-        '^/eventdirect/authority/.*': {
+        '/authority': {
           target: env.VITE_IDENTITY_URL || 'http://127.0.0.1:5101',
           changeOrigin: true,
-          secure: false,
-          agent: new http.Agent(),
-          rewrite: (path) => path.replace('/authority', '')
+          rewrite: (path) => path.replace(/^\/authority/, '')
         },
         '/graphql': {
           target: env.VITE_GRAPHQL_URL || 'http://127.0.0.1:5100/graphql',

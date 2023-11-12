@@ -1,0 +1,16 @@
+{
+    "rewrites": [
+        {
+            "source": "/authority/:path*",
+            "destination": "https://id.promag.minhtrandev.com/:path*"
+        },
+        {
+            "source": "/graphql",
+            "destination": "https://graph.promag.minhtrandev.com/graphql"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/"
+        }
+    ]
+}
