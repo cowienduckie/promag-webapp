@@ -1,3 +1,4 @@
+import http from 'https';
 import path from 'path';
 
 import react from '@vitejs/plugin-react';
@@ -14,10 +15,8 @@ export default defineConfig(({ mode }) => {
         '/authority': {
           target: env.VITE_IDENTITY_URL || 'http://127.0.0.1:5101',
           changeOrigin: true,
-          secure: true,
-          cors: {
-            sameOrigin: false
-          },
+          secure: false,
+          agent: new http.Agent(),
           rewrite: (path) => path.replace(/^\/authority/, '')
         },
         '/graphql': {
