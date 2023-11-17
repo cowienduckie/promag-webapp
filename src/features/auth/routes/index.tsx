@@ -10,7 +10,7 @@ export const AuthRoutes = () => {
   return (
     <Routes>
       <Route path="callback" element={<Callback />} />
-      <Route path="silent-callback" element={<SilentCallback />} />
+      <Route path="silent_callback" element={<SilentCallback />} />
       <Route path="401" element={<NotAuthenticated />} />
     </Routes>
   );
