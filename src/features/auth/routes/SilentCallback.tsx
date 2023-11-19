@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import Authentication from '@/lib/authentication';
+import Authentication from '@/libs/authentication';
 import Logger from '@/utils/logger';
 
 export const SilentCallback = () => {

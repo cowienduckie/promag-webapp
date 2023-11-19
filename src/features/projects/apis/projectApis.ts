@@ -1,4 +1,4 @@
-import { axios } from '@/lib/axios';
+import { axios } from '@/libs/axios';
 import { GetListQueryResponse } from '@/types/graphql-response';
 
 import { ISimplifiedProject } from '../types';

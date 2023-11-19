@@ -1,6 +1,6 @@
 import Axios, { InternalAxiosRequestConfig } from 'axios';
 
-import Authentication from '@/lib/authentication';
+import Authentication from '@/libs/authentication';
 import { useNotificationStore } from '@/stores/notifications';
 
 async function authRequestInterceptor(config: InternalAxiosRequestConfig) {

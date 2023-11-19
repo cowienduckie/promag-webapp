@@ -7,7 +7,5 @@ import { protectedRoutes } from './protected';
 export const routes: Array<RouteObject> = [...protectedRoutes, ...publicRoutes];
 
 export const AppRoutes = () => {
-  const router = createBrowserRouter([...routes]);
-
-  return router;
+  return createBrowserRouter([...routes]);
 };

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { FullScreenLoading } from '@/components/Loading';
-import Authentication from '@/lib/authentication';
+import Authentication from '@/libs/authentication';
 import Logger from '@/utils/logger';
 
 export const Callback = () => {

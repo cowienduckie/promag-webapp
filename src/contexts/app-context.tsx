@@ -10,7 +10,7 @@ import {
   UNLOAD_LOGINUSER,
   UPDATE_TOKEN
 } from '@/config/constants';
-import Authentication from '@/lib/authentication';
+import Authentication from '@/libs/authentication';
 import { AppState, AuthorizeInfo, LoadImage, LoginUser } from '@/types/app-interfaces';
 import { IContextProviderProps } from '@/types/context-provider';
 import Logger from '@/utils/logger';

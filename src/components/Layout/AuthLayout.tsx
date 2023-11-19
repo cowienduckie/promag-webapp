@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { FullScreenLoading } from '@/components/Loading';
 import { AppContext } from '@/contexts/app-context';
-import Authentication from '@/lib/authentication';
+import Authentication from '@/libs/authentication';
 
 type MenuItem = Required<MenuProps>['items'][number];
 

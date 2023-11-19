@@ -8,7 +8,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { FullScreenLoading } from '@/components/Loading';
 import { AppContextProvider } from '@/contexts/app-context';
-import { queryClient } from '@/lib/react-query';
+import { queryClient } from '@/libs/react-query';
 
 const ErrorFallback = () => {
   return (

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { axios } from '@/lib/axios';
-import { MutationConfig } from '@/lib/react-query';
+import { axios } from '@/libs/axios';
+import { MutationConfig } from '@/libs/react-query';
 import { useNotificationStore } from '@/stores/notifications';
 
 import { UserResponse } from '../types';
