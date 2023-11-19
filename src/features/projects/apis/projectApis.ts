@@ -1,28 +1,37 @@
+import { axios } from '@/lib/axios';
+import { GetListQueryResponse } from '@/types/graphql-response';
+
 import { ISimplifiedProject } from '../types';
 
-export const getProjects = (): Array<ISimplifiedProject> => {
-  const projects: Array<ISimplifiedProject> = [
-    {
-      id: '1',
-      name: 'Project 1'
-    },
-    {
-      id: '2',
-      name: 'Project 2'
-    },
-    {
-      id: '3',
-      name: 'Project 3'
-    },
-    {
-      id: '4',
-      name: 'Project 4'
-    },
-    {
-      id: '5',
-      name: 'Project 5'
-    }
-  ];
+export const getProjects = async (
+  skip = 0,
+  take = 10
+): Promise<GetListQueryResponse<ISimplifiedProject>> => {
+  const operationName = 'Projects';
+  const query = `
+    query ${operationName} {
+      ${operationName}(skip: ${skip}, take: ${take}) {
+          pageInfo {
+              hasNextPage
+              hasPreviousPage
+          }
+          items {
+              id
+              name
+              notes
+              createdOn
+              lastModifiedOn
+          }
+      }
+  }`;
 
-  return projects;
+  const graphqlQuery = {
+    operationName: operationName,
+    query: query,
+    variables: {}
+  };
+
+  const response = await axios.post('/graphql', graphqlQuery);
+
+  return response.data[operationName];
 };

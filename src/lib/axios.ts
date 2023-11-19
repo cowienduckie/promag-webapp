@@ -1,23 +1,21 @@
 import Axios, { InternalAxiosRequestConfig } from 'axios';
 
-import { GATEWAY_URL } from '@/config/environments';
 import Authentication from '@/lib/authentication';
 import { useNotificationStore } from '@/stores/notifications';
 
-function authRequestInterceptor(config: InternalAxiosRequestConfig) {
-  const token = Authentication.getAccessToken();
+async function authRequestInterceptor(config: InternalAxiosRequestConfig) {
+  const token = await Authentication.getAccessToken();
 
-  config.headers.Authorization = token ? `Bearer ${token}` : '';
+  config.headers.authorization = token ? `Bearer ${token}` : '';
   config.headers.Accept = 'application/json';
 
   return config;
 }
 
-export const axios = Axios.create({
-  baseURL: GATEWAY_URL
-});
+export const axios = Axios.create();
 
 axios.interceptors.request.use(authRequestInterceptor);
+
 axios.interceptors.response.use(
   (response) => {
     return response.data;
@@ -33,3 +31,17 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const graphqlRequest = async <T>(
+  operationName: string,
+  query: string,
+  variables?: object
+): Promise<T> => {
+  const response = await axios.post('/graphql', {
+    operationName,
+    query,
+    variables
+  });
+
+  return response.data[operationName] as T;
+};

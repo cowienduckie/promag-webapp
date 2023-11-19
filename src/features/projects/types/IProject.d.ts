@@ -1,5 +1,7 @@
 export interface ISimplifiedProject {
   id: string;
   name: string;
-  description?: string;
+  note?: string;
+  createdOn: Date;
+  lastModifiedOn?: Date;
 }
