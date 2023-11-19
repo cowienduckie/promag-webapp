@@ -1,3 +1,4 @@
+import { ProjectDetailLoader, ProjectDetailPage } from './detail';
 import { ProjectListLoader, ProjectListPage } from './list';
 
 export const ProjectRoutes = {
@@ -7,6 +8,11 @@ export const ProjectRoutes = {
       index: true,
       element: <ProjectListPage />,
       loader: ProjectListLoader
+    },
+    {
+      path: 'detail/:projectId',
+      element: <ProjectDetailPage />,
+      loader: ProjectDetailLoader
     }
   ]
 };
