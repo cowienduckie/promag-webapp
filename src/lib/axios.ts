@@ -1,20 +1,20 @@
 import Axios, { InternalAxiosRequestConfig } from 'axios';
 
-import { WEB_APIGW_URL } from '@/config/environments';
+import { GATEWAY_URL } from '@/config/environments';
 import Authentication from '@/lib/authentication';
 import { useNotificationStore } from '@/stores/notifications';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   const token = Authentication.getAccessToken();
 
-  config.headers.authorization = token ? `Bearer ${token}` : '';
+  config.headers.Authorization = token ? `Bearer ${token}` : '';
   config.headers.Accept = 'application/json';
 
   return config;
 }
 
 export const axios = Axios.create({
-  baseURL: WEB_APIGW_URL // TODO: Change this to switch between GraphQL and RESTful api
+  baseURL: GATEWAY_URL
 });
 
 axios.interceptors.request.use(authRequestInterceptor);
