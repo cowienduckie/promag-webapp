@@ -1,8 +1,8 @@
-import { IProject } from './IProject';
+import { IKanbanProject } from './IProject';
 
 export interface ProjectState {
-  project: IProject;
+  project: IKanbanProject;
   isProjectChanged: boolean;
-  setProject: (project: IProject) => void;
-  saveProjectChanges: (project: IProject) => void;
+  setProject: (project: IKanbanProject) => void;
+  saveProjectChanges: (project: IKanbanProject) => void;
 }

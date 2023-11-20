@@ -9,7 +9,7 @@ export interface ISimplifiedProject {
   lastModifiedOn?: Date;
 }
 
-export interface IProject {
+export interface IKanbanProject {
   id: string;
   name: string;
   notes?: string;

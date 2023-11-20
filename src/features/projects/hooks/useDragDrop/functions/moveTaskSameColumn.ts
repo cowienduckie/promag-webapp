@@ -1,14 +1,14 @@
 import { DraggableLocation } from 'react-beautiful-dnd';
 
-import { IColumn, IProject } from '../../../types';
+import { IKanbanColumn, IKanbanProject } from '../../../types';
 
 export const moveTaskSameColumn = (
-  currentState: IProject,
+  currentState: IKanbanProject,
   draggableId: string,
   source: DraggableLocation,
   destination: DraggableLocation,
-  column: IColumn
-): IProject => {
+  column: IKanbanColumn
+): IKanbanProject => {
   const newTaskIds = Array.from(column.taskIds);
 
   newTaskIds.splice(source.index, 1);

@@ -1,7 +1,7 @@
 import { axios } from '@/libs/axios';
 import { GetListQueryResponse } from '@/types/graphql-response';
 
-import { IProject, ISimplifiedProject } from '../types';
+import { IKanbanProject, ISimplifiedProject } from '../types';
 
 export const getProjects = async (
   skip = 0,
@@ -36,7 +36,7 @@ export const getProjects = async (
   return response.data[operationName];
 };
 
-export const getProjectById = async (projectId: string): Promise<IProject> => {
+export const getProjectById = async (projectId: string): Promise<IKanbanProject> => {
   return {
     id: projectId,
     name: 'ProMag',
@@ -78,6 +78,6 @@ export const getProjectById = async (projectId: string): Promise<IProject> => {
   };
 };
 
-export const updateProject = async (project: IProject): Promise<string> => {
+export const updateProject = async (project: IKanbanProject): Promise<string> => {
   return project.id;
 };

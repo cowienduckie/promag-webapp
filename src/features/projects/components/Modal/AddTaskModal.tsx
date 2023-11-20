@@ -6,9 +6,9 @@ import { ButtonModal } from '@/components/ButtonModal';
 import { useDisclosure } from '@/hooks/useDisclosure';
 
 import { ProjectContext } from '../../contexts/project-context';
-import { IColumn, IProject } from '../../types';
+import { IKanbanColumn, IKanbanProject } from '../../types';
 
-export const AddTaskModal = ({ column }: { column: IColumn }) => {
+export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
   const { isOpen, open, close } = useDisclosure(false);
   const projectContext = useContext(ProjectContext);
 
@@ -31,7 +31,7 @@ export const AddTaskModal = ({ column }: { column: IColumn }) => {
       columns: {
         ...projectContext.project.columns
       }
-    } as IProject;
+    } as IKanbanProject;
 
     projectContext.setProject(updatedProject);
 

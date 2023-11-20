@@ -4,19 +4,19 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import { StrictModeDroppable } from '@/libs/strict-mode-droppable';
 
-import { IColumn, ITask } from '../../types';
+import { IKanbanColumn, IKanbanTask } from '../../types';
 import { Container } from '../Container';
 import { AddTaskModal } from '../Modal';
 import { Task } from '../Task';
 import { TaskList } from '../TaskList';
 
 type ColumnProps = {
-  column: IColumn;
-  tasks: ITask[];
+  column: IKanbanColumn;
+  tasks: IKanbanTask[];
   index: number;
 };
 
-const InnerTaskList = memo(({ tasks }: { tasks: ITask[] }) => (
+const InnerTaskList = memo(({ tasks }: { tasks: IKanbanTask[] }) => (
   <>
     {tasks.map((task, index) => (
       <Task key={task.id} task={task} index={index} />

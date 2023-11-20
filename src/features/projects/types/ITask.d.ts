@@ -1,11 +1,11 @@
-export interface ITask {
+export interface IKanbanTask {
   id: string;
   name: string;
   notes?: string;
   isCompleted: boolean;
   completedOn?: Date;
   completedBy?: string;
-  startedOn?: Date;
+  startOn?: Date;
   dueOn?: Date;
   liked: boolean;
   likesCount: number;
@@ -15,5 +15,5 @@ export interface ITask {
 }
 
 export interface ITaskSet {
-  [key: string]: ITask;
+  [key: string]: IKanbanTask;
 }

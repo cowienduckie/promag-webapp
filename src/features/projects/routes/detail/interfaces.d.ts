@@ -1,5 +1,5 @@
-import { IProject } from '../../types';
+import { IKanbanProject } from '../../types';
 
 export interface LoaderData {
-  project: IProject;
+  project: IKanbanProject;
 }

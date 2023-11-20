@@ -7,11 +7,11 @@ import { Draggable } from 'react-beautiful-dnd';
 import { useDisclosure } from '@/hooks/useDisclosure';
 
 import { ProjectContext } from '../../contexts/project-context';
-import { IProject, ITask } from '../../types';
+import { IKanbanProject, IKanbanTask } from '../../types';
 import { Container } from '../Container';
 
 type TaskProps = {
-  task: ITask;
+  task: IKanbanTask;
   index: number;
 };
 
@@ -63,7 +63,7 @@ const Task = (props: TaskProps) => {
           description: values.description ?? ''
         }
       }
-    } as IProject;
+    } as IKanbanProject;
 
     projectContext.setProject(updatedProject);
   };
@@ -78,7 +78,7 @@ const Task = (props: TaskProps) => {
           isCompleted: !task.isCompleted
         }
       }
-    } as IProject;
+    } as IKanbanProject;
     projectContext.setProject(updatedProject);
   };
 
