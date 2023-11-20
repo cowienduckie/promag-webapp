@@ -77,3 +77,7 @@ export const getProjectById = async (projectId: string): Promise<IProject> => {
     columnOrder: ['column-1', 'column-2', 'column-3']
   };
 };
+
+export const updateProject = async (project: IProject): Promise<string> => {
+  return project.id;
+};

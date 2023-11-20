@@ -1,7 +1,7 @@
 import { Button, Modal } from 'antd';
 import { ReactNode } from 'react';
 
-type Props = {
+interface Props {
   isModalOpen: boolean;
   buttonTitle: ReactNode;
   buttonClassName?: string;
@@ -12,7 +12,8 @@ type Props = {
   handleOk?: () => void;
   handleCancel?: () => void;
   footer?: boolean;
-};
+  disabled?: boolean;
+}
 
 export const ButtonModal = (props: Props) => {
   const {
@@ -26,6 +27,7 @@ export const ButtonModal = (props: Props) => {
     handleOk,
     handleCancel,
     footer,
+    disabled,
     ...ButtonProps
   } = props;
 
@@ -36,6 +38,7 @@ export const ButtonModal = (props: Props) => {
           handleOpen && handleOpen();
         }}
         className={buttonClassName}
+        disabled={disabled ?? false}
         {...ButtonProps}
       >
         {buttonTitle}

@@ -1,1 +1,2 @@
 export const SET_PROJECT = 'SET_PROJECT';
+export const SAVE_PROJECT_CHANGES = 'SAVE_PROJECT_CHANGES';

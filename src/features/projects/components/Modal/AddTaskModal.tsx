@@ -73,11 +73,11 @@ export const AddTaskModal = ({ column }: { column: IColumn }) => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button className="mr-2" type="primary" htmlType="submit">
-            Submit
-          </Button>
-          <Button className="ml-2" type="default" onClick={close}>
+          <Button className="mr-2" type="default" onClick={close}>
             Cancel
+          </Button>
+          <Button className="ml-2" type="primary" htmlType="submit">
+            Submit
           </Button>
         </Form.Item>
       </Form>

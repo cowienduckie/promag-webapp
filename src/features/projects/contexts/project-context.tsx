@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useCallback, useMemo, useReducer } from 'react';
 
-import { SET_PROJECT } from '../common/project-context-actions';
+import { getProjectById, updateProject } from '../apis';
+import { SAVE_PROJECT_CHANGES, SET_PROJECT } from '../common/project-context-actions';
 import { IProject } from '../types';
 import { ProjectState } from '../types/ProjectContext';
 
@@ -16,8 +17,15 @@ const initialState: ProjectState = {
     columnOrder: []
   },
 
+  isProjectChanged: false,
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setProject(project: IProject): void {
+    throw new Error('ProjectContext not yet initialized.');
+  },
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  saveProjectChanges(): void {
     throw new Error('ProjectContext not yet initialized.');
   }
 };
@@ -30,15 +38,24 @@ type Action =
       payload: IProject;
     }
   | {
-      type: 'NONE';
+      type: typeof SAVE_PROJECT_CHANGES;
+      payload: IProject;
     };
 
 const reducer = (state: ProjectState, action: Action): ProjectState => {
   switch (action.type) {
     case SET_PROJECT: {
-      // TODO: Call API to update project
       return {
         ...state,
+        isProjectChanged: true,
+        project: action.payload
+      };
+    }
+
+    case SAVE_PROJECT_CHANGES: {
+      return {
+        ...state,
+        isProjectChanged: false,
         project: action.payload
       };
     }
@@ -61,12 +78,31 @@ export const ProjectContextProvider = (props: {
     });
   }, []);
 
+  const saveProjectChanges = useCallback((project: IProject) => {
+    updateProject(project)
+      .then((projectId) => {
+        getProjectById(projectId).then((updatedProject) => {
+          dispatch({
+            type: SAVE_PROJECT_CHANGES,
+            payload: updatedProject
+          });
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: SAVE_PROJECT_CHANGES,
+          payload: project
+        });
+      });
+  }, []);
+
   const value: ProjectState = useMemo(
     () => ({
       ...state,
-      setProject
+      setProject,
+      saveProjectChanges
     }),
-    [state, setProject]
+    [state, setProject, saveProjectChanges]
   );
 
   return <ProjectContext.Provider value={value}>{props.children}</ProjectContext.Provider>;

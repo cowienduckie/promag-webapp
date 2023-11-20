@@ -1,7 +1,9 @@
+import { Divider } from 'antd';
 import clsx from 'clsx';
 import { useLoaderData } from 'react-router-dom';
 
 import { KanbanBoard } from '../../../components/KanbanBoard';
+import { SaveProjectChangesModal } from '../../../components/Modal/SaveProjectChangesModal';
 import { ProjectContextProvider } from '../../../contexts/project-context';
 import { LoaderData } from '../interfaces';
 
@@ -15,7 +17,9 @@ export const ProjectDetailPage = () => {
           <h1 className={clsx('text-2xl font-bold')}>
             PROJECT {'>'} {project.name.toLocaleUpperCase()}
           </h1>
+          <SaveProjectChangesModal />
         </div>
+        <Divider />
         <KanbanBoard />
       </div>
     </ProjectContextProvider>
