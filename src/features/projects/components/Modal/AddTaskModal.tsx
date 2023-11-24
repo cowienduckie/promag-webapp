@@ -1,44 +1,52 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Checkbox, DatePicker, DatePickerProps, Form, Input } from 'antd';
+import { RangePickerProps } from 'antd/es/date-picker';
 import TextArea from 'antd/es/input/TextArea';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import { ButtonModal } from '@/components/ButtonModal';
 import { useDisclosure } from '@/hooks/useDisclosure';
 
 import { ProjectContext } from '../../contexts/project-context';
-import { IKanbanColumn, IKanbanProject } from '../../types';
+import { IKanbanColumn, IKanbanTask } from '../../types';
+
+const { RangePicker } = DatePicker;
+
+type FormValues =
+  | {
+      name: string;
+      notes?: string;
+      dueOn?: DatePickerProps['value'];
+      dateRange?: RangePickerProps['value'];
+    }
+  | any;
 
 export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
-  const { isOpen, open, close } = useDisclosure(false);
   const projectContext = useContext(ProjectContext);
 
-  const onFinish = (values: { name: string; description?: string }) => {
-    const newId: string = 'Task-' + (Object.keys(projectContext.project.tasks).length + 1);
+  const { isOpen, open, close } = useDisclosure(false);
+  const [startDateIncluded, setStartDateIncluded] = useState(false);
 
-    projectContext.project.columns[column.id].taskIds.push(newId);
+  const onFinishForm = (values: FormValues) => {
+    const newTask: IKanbanTask = {
+      id: 'newId',
+      name: values.name,
+      notes: values.notes,
 
-    const updatedProject = {
-      ...projectContext.project,
-      tasks: {
-        ...projectContext.project.tasks,
-        [newId]: {
-          id: newId,
-          name: values.name,
-          description: values.description ?? '',
-          column: column.id
-        }
-      },
-      columns: {
-        ...projectContext.project.columns
-      }
-    } as IKanbanProject;
+      startOn: startDateIncluded ? values.dateRange[0] : undefined,
+      dueOn: startDateIncluded ? values.dateRange[1] : values.dueOn,
 
-    projectContext.setProject(updatedProject);
+      column: column.id,
 
+      isCompleted: false,
+      liked: false,
+      likesCount: 0
+    };
+
+    projectContext.addTask(newTask, projectContext.project.id);
     close();
   };
 
-  const onFinishFailed = (errorInfo: unknown) => {
+  const onFinishFormFailed = (errorInfo: unknown) => {
     alert(`Failed: ${errorInfo}`);
   };
 
@@ -56,8 +64,8 @@ export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
         className="my-5"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        onFinish={onFinishForm}
+        onFinishFailed={onFinishFormFailed}
         autoComplete="off"
       >
         <Form.Item
@@ -68,8 +76,26 @@ export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
           <Input />
         </Form.Item>
 
-        <Form.Item label="Description" name="description">
+        <Form.Item label="Notes" name="notes">
           <TextArea rows={3} />
+        </Form.Item>
+
+        {startDateIncluded ? (
+          <Form.Item label="Date Range" name="dateRange">
+            <RangePicker onOk={() => {}} />
+          </Form.Item>
+        ) : (
+          <Form.Item label="Due Date" name="dueOn">
+            <DatePicker onOk={() => {}} />
+          </Form.Item>
+        )}
+
+        <Form.Item label="Start Date?">
+          <Checkbox
+            onChange={(e) => {
+              setStartDateIncluded(e.target.checked);
+            }}
+          />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

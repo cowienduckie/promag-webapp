@@ -1,4 +1,4 @@
-import { axios } from '@/libs/axios';
+import { axios, graphqlRequest } from '@/libs/axios';
 import { GetListQueryResponse } from '@/types/graphql-response';
 
 import { IKanbanProject, ISimplifiedProject } from '../types';
@@ -37,47 +37,52 @@ export const getProjects = async (
 };
 
 export const getProjectById = async (projectId: string): Promise<IKanbanProject> => {
-  return {
-    id: projectId,
-    name: 'ProMag',
-    color: '#000000',
-    createdOn: new Date(Date.now()),
+  const operationName = 'KanbanProject';
+  const query = `
+    query KanbanProject {
+      KanbanProject(input: { projectId: "${projectId}" }) {
+        tasks
+        columns
+        id
+        name
+        notes
+        color
+        dueDate
+        createdOn
+        lastModifiedOn
+        columnOrder
+    }
+}`;
 
-    tasks: {
-      'task-1': {
-        id: 'task-1',
-        name: 'Task 1',
-        notes: 'Task 1 description',
-        isCompleted: false,
-
-        liked: false,
-        likesCount: 0,
-
-        column: 'column-1'
-      }
-    },
-    columns: {
-      'column-1': {
-        id: 'column-1',
-        name: 'To-do',
-        taskIds: ['task-1']
-      },
-      'column-2': {
-        id: 'column-2',
-        name: 'In Progress',
-        taskIds: []
-      },
-      'column-3': {
-        id: 'column-3',
-        name: 'Done',
-        taskIds: []
-      }
-    },
-
-    columnOrder: ['column-1', 'column-2', 'column-3']
-  };
+  return await graphqlRequest<IKanbanProject>(operationName, query);
 };
 
 export const updateProject = async (project: IKanbanProject): Promise<string> => {
+  const operationName = 'UpdateKanbanProject';
+  const mutation = `
+    mutation ${operationName}($input: UpdateKanbanProjectCommandInput!) {
+      updateKanbanProject(input: $input) {
+          projectId
+          statusCode
+          errorCode
+          errorMessage
+      }
+  }`;
+
+  interface ResponseType {
+    projectId?: string;
+    statusCode: number;
+    errorCode?: string;
+    errorMessage?: string;
+  }
+
+  await graphqlRequest<ResponseType>(operationName, mutation, {
+    input: {
+      projectId: project.id,
+      columnOrder: [...project.columnOrder],
+      tasks: { ...project.tasks }
+    }
+  });
+
   return project.id;
 };

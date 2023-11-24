@@ -34,6 +34,9 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, './src')
       }
     },
-    plugins: [react(), mkcert()]
+    plugins: [react(), mkcert()],
+    optimizeDeps: {
+      exclude: ['js-big-decimal']
+    }
   };
 });
