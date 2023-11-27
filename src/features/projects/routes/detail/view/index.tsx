@@ -1,6 +1,6 @@
 import { Divider } from 'antd';
 import clsx from 'clsx';
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
 import { KanbanBoard } from '../../../components/KanbanBoard';
 import { SaveProjectChangesModal } from '../../../components/Modal/SaveProjectChangesModal';
@@ -13,9 +13,12 @@ export const ProjectDetailPage = () => {
   return (
     <ProjectContextProvider initialProject={project}>
       <div className={clsx('m-0 h-full')}>
-        <div className={clsx('justify m-10 mb-5 flex flex-row justify-between')}>
+        <div className={clsx('justify m-10 mb-2 flex flex-row justify-between')}>
           <h1 className={clsx('text-2xl font-bold')}>
-            PROJECT {'>'} {project.name.toLocaleUpperCase()}
+            <Link className={clsx('mr-2 text-gray-400 hover:text-black')} to={'/app/projects'}>
+              Your Projects |
+            </Link>
+            {project.name}
           </h1>
           <SaveProjectChangesModal />
         </div>

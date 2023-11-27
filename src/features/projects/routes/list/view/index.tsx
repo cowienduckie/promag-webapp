@@ -1,33 +1,79 @@
-import { Card } from 'antd';
-import { NavLink, useLoaderData } from 'react-router-dom';
+import { ProjectOutlined } from '@ant-design/icons';
+import { Card, Pagination } from 'antd';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import { NavLink, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { CardDeck } from '@/components/CardDeck';
 
+import { AddProjectModal } from '../../../components/Modal/AddProjectModal';
 import { LoaderData } from '../interfaces';
 
 export const ProjectListPage = () => {
-  const { projects } = useLoaderData() as LoaderData;
+  const { projects, totalCount, pageIndex, pageSize } = useLoaderData() as LoaderData;
+  const revalidator = useRevalidator();
+
+  const onRefreshList = () => {
+    revalidator.revalidate();
+  };
+
+  const onPaging = (page: number, pageSize: number) => {
+    const url = new URL(window.location.toString());
+
+    url.searchParams.set('pageIndex', page.toString());
+    url.searchParams.set('pageSize', pageSize.toString());
+
+    window.history.pushState(null, '', url);
+    onRefreshList();
+  };
 
   const projectCards = projects.map((project) => (
     <NavLink key={project.id} to={`/app/projects/detail/${project.id}`}>
       <Card
-        title={<p className="text-xl font-bold">{project.name.toLocaleUpperCase()}</p>}
+        title={
+          <p className="truncate text-xl">
+            <ProjectOutlined className={clsx('mr-2 align-baseline')} />
+            {project.name}
+          </p>
+        }
         className="bg-base-100 border shadow-sm"
       >
         <p className="mb-2 text-base">
-          <strong>ID: </strong> {project.id}
+          <strong>Created On: </strong>
+          {dayjs(project.createdOn).format('hh:mm MMM DD')}
         </p>
-        <p className="mb-2 text-base">
-          <strong>Name: </strong> {project.name}
-        </p>
+        {!!project.lastModifiedOn && (
+          <p className="mb-2 text-base">
+            <strong>Last Modified: </strong>
+            {dayjs(project.lastModifiedOn).format('hh:mm MMM DD')}
+          </p>
+        )}
+        <p className="line-clamp-2">{project.notes}</p>
       </Card>
     </NavLink>
   ));
 
   return (
-    <div className="m-6 flex h-full flex-col">
-      <h1 className="my-5 text-2xl font-bold">PROJECT LIST</h1>
-      <CardDeck className="bg-gray-100 p-10" cards={projectCards} colNum={4} hGutter={24} />
+    <div className={clsx('flex h-full flex-col p-5')}>
+      <div className={clsx('my-5 flex flex-row justify-between px-2')}>
+        <h1 className={clsx('text-2xl font-bold')}>Your Projects</h1>
+        <AddProjectModal onRefreshList={onRefreshList} />
+      </div>
+      <CardDeck
+        className={clsx('my-3 h-full bg-gray-100 p-10')}
+        cards={projectCards}
+        colNum={3}
+        hGutter={24}
+      />
+      <div className={clsx('mt-3 flex flex-row-reverse')}>
+        <Pagination
+          total={totalCount}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          defaultCurrent={pageIndex}
+          defaultPageSize={pageSize}
+          onChange={onPaging}
+        />
+      </div>
     </div>
   );
 };

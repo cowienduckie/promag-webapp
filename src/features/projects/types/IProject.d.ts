@@ -9,6 +9,13 @@ export interface ISimplifiedProject {
   lastModifiedOn?: Date;
 }
 
+export interface ICreateProjectDto {
+  name: string;
+  notes?: string;
+  color?: string;
+  dueDate?: Date;
+}
+
 export interface IKanbanProject {
   id: string;
   name: string;

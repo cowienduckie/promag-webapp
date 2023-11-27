@@ -1,7 +1,7 @@
 import { axios, graphqlRequest } from '@/libs/axios';
 import { GetListQueryResponse } from '@/types/graphql-response';
 
-import { IKanbanProject, ISimplifiedProject } from '../types';
+import { ICreateProjectDto, IKanbanProject, ISimplifiedProject } from '../types';
 
 export const getProjects = async (
   skip = 0,
@@ -11,10 +11,7 @@ export const getProjects = async (
   const query = `
     query ${operationName} {
       ${operationName}(skip: ${skip}, take: ${take}) {
-          pageInfo {
-              hasNextPage
-              hasPreviousPage
-          }
+          totalCount
           items {
               id
               name
@@ -55,6 +52,35 @@ export const getProjectById = async (projectId: string): Promise<IKanbanProject>
 }`;
 
   return await graphqlRequest<IKanbanProject>(operationName, query);
+};
+
+export const createProject = async (project: ICreateProjectDto): Promise<void> => {
+  const operationName = 'CreateProject';
+  const mutation = `
+    mutation ${operationName}($input: CreateProjectCommandInput!) {
+      createProject(input: $input) {
+          projectId
+          statusCode
+          errorCode
+          errorMessage
+      }
+  }`;
+
+  interface ResponseType {
+    projectId?: string;
+    statusCode: number;
+    errorCode?: string;
+    errorMessage?: string;
+  }
+
+  await graphqlRequest<ResponseType>(operationName, mutation, {
+    input: {
+      name: project.name,
+      notes: project.notes,
+      color: project.color,
+      dueDate: project.dueDate
+    }
+  });
 };
 
 export const updateProject = async (project: IKanbanProject): Promise<string> => {

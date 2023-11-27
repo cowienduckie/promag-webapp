@@ -76,10 +76,6 @@ export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
           <Input />
         </Form.Item>
 
-        <Form.Item label="Notes" name="notes">
-          <TextArea rows={3} />
-        </Form.Item>
-
         {startDateIncluded ? (
           <Form.Item label="Date Range" name="dateRange">
             <RangePicker onOk={() => {}} />
@@ -96,6 +92,10 @@ export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
               setStartDateIncluded(e.target.checked);
             }}
           />
+        </Form.Item>
+
+        <Form.Item label="Notes" name="notes">
+          <TextArea rows={3} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

@@ -3,5 +3,6 @@ export interface GetListQueryResponse<TItem> {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
   };
+  totalCount: number;
   items: TItem[];
 }
