@@ -120,7 +120,7 @@ export const ProjectContextProvider = (props: {
       saveProjectChanges,
       addTask
     }),
-    [state, setProject, saveProjectChanges]
+    [state, setProject, saveProjectChanges, addTask]
   );
 
   return <ProjectContext.Provider value={value}>{props.children}</ProjectContext.Provider>;
