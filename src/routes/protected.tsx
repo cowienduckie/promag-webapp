@@ -2,6 +2,7 @@ import { Outlet, RouteObject } from 'react-router-dom';
 
 import { FullScreenError } from '@/components/Error';
 import { AuthLayout } from '@/components/Layout';
+import { ProfileRoutes } from '@/features/profile';
 import { ProjectRoutes } from '@/features/projects';
 
 const App = () => {
@@ -17,6 +18,6 @@ export const protectedRoutes: Array<RouteObject> = [
     path: '/app',
     element: <App />,
     errorElement: <FullScreenError />,
-    children: [{ ...ProjectRoutes }]
+    children: [{ ...ProjectRoutes }, { ...ProfileRoutes }]
   }
 ];

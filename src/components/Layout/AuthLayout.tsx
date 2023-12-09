@@ -32,7 +32,7 @@ const useMenuData = () => {
   ];
 
   const profileItems: MenuItem[] = [
-    getItem(<Link to="/profile/me">Profile</Link>, '/profile/me', <UserOutlined />),
+    getItem(<Link to="/app/profile/me">Profile</Link>, '/profile/me', <UserOutlined />),
     getItem(
       <Link to="/" onClick={() => Authentication.signOut()}>
         Sign Out

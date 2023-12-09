@@ -97,7 +97,8 @@ const Task = (props: TaskProps) => {
             <p onClick={open}>
               <strong>{task.name}</strong>
             </p>
-            <Checkbox className="mt-5" onClick={handleMarkAsCompleted} checked={task.isCompleted}>
+            <p className="mt-5">{task.assignee == '' ? 'Not yet assigned' : task.assignee}</p>
+            <Checkbox className="mt-3" onClick={handleMarkAsCompleted} checked={task.isCompleted}>
               Is Completed?
             </Checkbox>
           </Container>
