@@ -1,10 +1,10 @@
 import { Button, Flex, Form, Input, Typography } from 'antd';
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Head } from '@/components/Head';
 
-import { useRegisterWithEmail } from '../apis/register';
+import { registerWithEmail } from '../apis/registerApis';
 import { RegisterUserInput } from '../types';
 
 type FormValues =
@@ -16,7 +16,7 @@ type FormValues =
 
 export const Register = () => {
   const [form] = Form.useForm();
-  const { mutateAsync } = useRegisterWithEmail();
+  const navigate = useNavigate();
 
   const onFinishForm = (values: FormValues) => {
     const input: RegisterUserInput = {
@@ -26,9 +26,18 @@ export const Register = () => {
       lastName: values.lastName
     };
 
-    mutateAsync(input).finally(() => {
-      form.resetFields();
-    });
+    registerWithEmail(input)
+      .then(() => {
+        alert('Register successfully!');
+        navigate('/app');
+      })
+      .catch((error) => {
+        alert(`Failed: ${error}`);
+        navigate('/');
+      })
+      .finally(() => {
+        form.resetFields();
+      });
   };
 
   const onFinishFormFailed = (errorInfo: unknown) => {

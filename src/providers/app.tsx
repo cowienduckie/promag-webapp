@@ -1,6 +1,4 @@
 import { StyleProvider } from '@ant-design/cssinjs';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Button } from 'antd';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -8,7 +6,6 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { FullScreenLoading } from '@/components/Loading';
 import { AppContextProvider } from '@/contexts/app-context';
-import { queryClient } from '@/libs/react-query';
 
 const ErrorFallback = () => {
   return (
@@ -34,10 +31,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HelmetProvider>
           <StyleProvider hashPriority="high">
-            <QueryClientProvider client={queryClient}>
-              <AppContextProvider>{children}</AppContextProvider>
-              {import.meta.env.DEV && <ReactQueryDevtools />}
-            </QueryClientProvider>
+            <AppContextProvider>{children}</AppContextProvider>
           </StyleProvider>
         </HelmetProvider>
       </ErrorBoundary>
