@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path.replace(/^\/graphql/, '')
         },
         '/web-apigw': {
-          target: env.VITE_WEB_APIGW_URL || 'http://127.0.0.1:5103',
+          target: env.VITE_WEB_APIGW_URL || 'http://127.0.0.1:5100',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/web-apigw/, '')
         }

@@ -1,16 +1,20 @@
 {
-    "rewrites": [
-        {
-            "source": "/authority/:path*",
-            "destination": "https://id.promag.minhtrandev.com/:path*"
-        },
-        {
-            "source": "/graphql",
-            "destination": "https://graph.promag.minhtrandev.com/graphql"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/"
-        }
-    ]
+  "rewrites": [
+    {
+      "source": "/authority/:path*",
+      "destination": "https://id.promag.minhtrandev.com/:path*"
+    },
+    {
+      "source": "/graphql",
+      "destination": "https://gw.promag.minhtrandev.com/graphql"
+    },
+    {
+      "source": "/web-apigw/:path*",
+      "destination": "https://gw.promag.minhtrandev.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
 }
