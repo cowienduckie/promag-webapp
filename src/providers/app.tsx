@@ -1,5 +1,5 @@
 import { StyleProvider } from '@ant-design/cssinjs';
-import { Button } from 'antd';
+import { App as AntdApp, Button } from 'antd';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
@@ -31,7 +31,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HelmetProvider>
           <StyleProvider hashPriority="high">
-            <AppContextProvider>{children}</AppContextProvider>
+            <AntdApp>
+              <AppContextProvider>{children}</AppContextProvider>
+            </AntdApp>
           </StyleProvider>
         </HelmetProvider>
       </ErrorBoundary>

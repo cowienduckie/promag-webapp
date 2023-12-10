@@ -19,7 +19,8 @@ export const Callback = () => {
         navigate(user.url_state as string);
       } catch (error) {
         Logger.error(`There was an error while handling the token callback: ${error}`);
-        navigate('/auth/401');
+
+        navigate('/401');
       }
     };
 

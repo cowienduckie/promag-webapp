@@ -1,8 +1,10 @@
-import { Button, Flex, Form, Input, Typography } from 'antd';
+import { App, Button, Flex, Form, Input, Typography } from 'antd';
 import clsx from 'clsx';
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Head } from '@/components/Head';
+import { AppContext } from '@/contexts/app-context';
 
 import { registerWithEmail } from '../apis/registerApis';
 import { RegisterUserInput } from '../types';
@@ -15,8 +17,15 @@ type FormValues =
   | any;
 
 export const Register = () => {
-  const [form] = Form.useForm();
+  const { authenticated } = useContext(AppContext);
   const navigate = useNavigate();
+
+  if (authenticated) {
+    navigate('/app');
+  }
+
+  const [form] = Form.useForm();
+  const { notification } = App.useApp();
 
   const onFinishForm = (values: FormValues) => {
     const input: RegisterUserInput = {
@@ -28,20 +37,39 @@ export const Register = () => {
 
     registerWithEmail(input)
       .then(() => {
-        alert('Register successfully!');
-        navigate('/app');
-      })
-      .catch((error) => {
-        alert(`Failed: ${error}`);
+        form.resetFields();
+
+        notification.success({
+          message: 'Account Registration Succeeded!',
+          description:
+            'Your new account register successfully .Please check your email to verify your account.',
+          placement: 'topRight',
+          duration: 3
+        });
+
         navigate('/');
       })
-      .finally(() => {
+      .catch(() => {
         form.resetFields();
+
+        notification.error({
+          message: 'Account Registration Failed!',
+          description: 'Your new account register failed. Please try again!',
+          placement: 'topRight',
+          duration: 3
+        });
+
+        navigate('/');
       });
   };
 
-  const onFinishFormFailed = (errorInfo: unknown) => {
-    alert(`Failed: ${errorInfo}`);
+  const onFinishFormFailed = (errorInfo: any) => {
+    notification.error({
+      message: 'Account Registration Failed!',
+      description: errorInfo,
+      placement: 'topRight',
+      duration: 3
+    });
   };
 
   return (

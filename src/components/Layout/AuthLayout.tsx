@@ -81,9 +81,11 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       {authenticated && (
         <Layout className={clsx('min-h-screen bg-blue-100')}>
           <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-            <h1 className={clsx('my-5 text-center text-2xl font-bold text-white')}>
-              {!collapsed ? 'PROMAG' : 'PM'}
-            </h1>
+            <Link to="/">
+              <h1 className={clsx('my-5 text-center text-2xl font-bold text-white')}>
+                {!collapsed ? 'PROMAG' : 'PM'}
+              </h1>
+            </Link>
             <Menu
               theme="dark"
               className={clsx('bg-inherit pt-5')}

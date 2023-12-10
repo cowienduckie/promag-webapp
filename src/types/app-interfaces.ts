@@ -16,15 +16,8 @@ export interface AuthorizeInfo {
 }
 
 export interface AppState {
-  image: string | null;
-  applicationSetting: ApplicationSetting;
   userLogin: LoginUser | null;
   authenticated: boolean;
-  isSettingMenu: boolean;
-  isNavBarOpen: boolean;
   access_token: string | null;
-  toggleNavBar: () => void;
-  toggleSettingMenu: () => void;
-  toggleLoadImage: (id: string) => void;
   updateToken: (access_token: string) => void;
 }

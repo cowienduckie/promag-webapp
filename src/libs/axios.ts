@@ -1,7 +1,7 @@
 import Axios, { InternalAxiosRequestConfig } from 'axios';
 
 import Authentication from '@/libs/authentication';
-import { useNotificationStore } from '@/stores/notifications';
+import { IError } from '@/types/error';
 
 async function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   const token = await Authentication.getAccessToken();
@@ -15,19 +15,11 @@ async function authRequestInterceptor(config: InternalAxiosRequestConfig) {
 export const axios = Axios.create();
 
 axios.interceptors.request.use(authRequestInterceptor);
-
 axios.interceptors.response.use(
   (response) => {
-    return response.data;
+    return response;
   },
   (error) => {
-    const message = error.response?.data?.message || error.message;
-    useNotificationStore.getState().addNotification({
-      type: 'error',
-      title: 'Error',
-      message
-    });
-
     return Promise.reject(error);
   }
 );
@@ -37,11 +29,33 @@ export const graphqlRequest = async <T>(
   query: string,
   variables?: object
 ): Promise<T> => {
-  const response = await axios.post('/graphql', {
+  const { data: responseData } = await axios.post('/graphql', {
     operationName,
     query,
     variables
   });
 
-  return response.data[operationName] as T;
+  const { data, errors } = responseData;
+
+  if (!data[operationName] || errors) {
+    const error: IError = {
+      status: '500',
+      statusText: 'Internal Server Error',
+      message: errors?.[0]?.message ?? 'An error occurred'
+    };
+
+    throw error;
+  }
+
+  if (data[operationName].statusCode && data[operationName].statusCode !== 200) {
+    const error: IError = {
+      status: data[operationName].statusCode,
+      statusText: data[operationName].errorCode,
+      message: data[operationName].errorMessage
+    };
+
+    throw error;
+  }
+
+  return data[operationName] as T;
 };
