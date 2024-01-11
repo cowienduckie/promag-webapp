@@ -2,7 +2,7 @@ import { graphqlRequest } from '@/libs/axios';
 
 import { IProfile } from '../types';
 
-export const getMyProfile = async (): Promise<IProfile> => {
+export const getMyProfile = (): Promise<IProfile> => {
   const operationName = 'Me';
   const query = `
     query ${operationName} {
@@ -26,5 +26,5 @@ export const getMyProfile = async (): Promise<IProfile> => {
     }
 }`;
 
-  return await graphqlRequest<IProfile>(operationName, query);
+  return graphqlRequest<IProfile>(operationName, query);
 };

@@ -92,8 +92,8 @@ export const ProjectContextProvider = (props: {
   }, []);
 
   const saveProjectChanges = useCallback((project: IKanbanProject) => {
-    updateProject(project).then((projectId) => {
-      getProjectById(projectId).then((updatedProject) => {
+    updateProject(project).then(() => {
+      getProjectById(project.id).then((updatedProject) => {
         dispatch({
           type: SAVE_PROJECT_CHANGES,
           payload: updatedProject

@@ -22,11 +22,11 @@ export const AddProjectModal = ({ onRefreshList }: { onRefreshList: () => void }
   const [form] = Form.useForm();
   const { isOpen, open, close } = useDisclosure(false);
 
-  const onFinishForm = (values: FormValues) => {
+  const onFinishForm = async (values: FormValues) => {
     const newProject: ICreateProjectDto = {
       name: values.name,
       notes: values.notes,
-      color: values.color.toHexString(),
+      color: values.color?.toHexString() ?? '#000000',
       dueDate: values.dueOn
     };
 

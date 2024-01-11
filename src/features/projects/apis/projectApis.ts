@@ -1,9 +1,9 @@
-import { axios, graphqlRequest } from '@/libs/axios';
+import { graphqlRequest } from '@/libs/axios';
 import { GetListQueryResponse } from '@/types/graphql-response';
 
 import { ICreateProjectDto, IKanbanProject, ISimplifiedProject } from '../types';
 
-export const getProjects = async (
+export const getProjects = (
   skip = 0,
   take = 10
 ): Promise<GetListQueryResponse<ISimplifiedProject>> => {
@@ -22,22 +22,14 @@ export const getProjects = async (
       }
   }`;
 
-  const graphqlQuery = {
-    operationName: operationName,
-    query: query,
-    variables: {}
-  };
-
-  const response = await axios.post('/graphql', graphqlQuery);
-
-  return response.data[operationName];
+  return graphqlRequest<GetListQueryResponse<ISimplifiedProject>>(operationName, query);
 };
 
-export const getProjectById = async (projectId: string): Promise<IKanbanProject> => {
+export const getProjectById = (projectId: string): Promise<IKanbanProject> => {
   const operationName = 'KanbanProject';
   const query = `
-    query KanbanProject {
-      KanbanProject(input: { projectId: "${projectId}" }) {
+    query ${operationName} {
+      ${operationName}(input: { projectId: "${projectId}" }) {
         tasks
         columns
         id
@@ -51,10 +43,10 @@ export const getProjectById = async (projectId: string): Promise<IKanbanProject>
     }
 }`;
 
-  return await graphqlRequest<IKanbanProject>(operationName, query);
+  return graphqlRequest<IKanbanProject>(operationName, query);
 };
 
-export const createProject = async (project: ICreateProjectDto): Promise<void> => {
+export const createProject = (project: ICreateProjectDto): Promise<any> => {
   const operationName = 'CreateProject';
   const mutation = `
     mutation ${operationName}($input: CreateProjectCommandInput!) {
@@ -73,7 +65,7 @@ export const createProject = async (project: ICreateProjectDto): Promise<void> =
     errorMessage?: string;
   }
 
-  await graphqlRequest<ResponseType>(operationName, mutation, {
+  return graphqlRequest<ResponseType>(operationName, mutation, {
     input: {
       name: project.name,
       notes: project.notes,
@@ -83,7 +75,7 @@ export const createProject = async (project: ICreateProjectDto): Promise<void> =
   });
 };
 
-export const updateProject = async (project: IKanbanProject): Promise<string> => {
+export const updateProject = (project: IKanbanProject): Promise<any> => {
   const operationName = 'UpdateKanbanProject';
   const mutation = `
     mutation ${operationName}($input: UpdateKanbanProjectCommandInput!) {
@@ -102,13 +94,11 @@ export const updateProject = async (project: IKanbanProject): Promise<string> =>
     errorMessage?: string;
   }
 
-  await graphqlRequest<ResponseType>(operationName, mutation, {
+  return graphqlRequest<ResponseType>(operationName, mutation, {
     input: {
       projectId: project.id,
       columnOrder: [...project.columnOrder],
       tasks: { ...project.tasks }
     }
   });
-
-  return project.id;
 };

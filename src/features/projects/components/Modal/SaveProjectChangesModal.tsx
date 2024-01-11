@@ -11,8 +11,8 @@ export const SaveProjectChangesModal = () => {
   const { isOpen, open, close } = useDisclosure(false);
   const projectState = useContext(ProjectContext);
 
-  const onSaveChanges = () => {
-    projectState.saveProjectChanges(projectState.project);
+  const onSaveChanges = async () => {
+    await projectState.saveProjectChanges(projectState.project);
     close();
   };
 
