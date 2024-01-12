@@ -14,6 +14,15 @@ export interface IKanbanTask {
   column: string;
 }
 
+export interface ISimplifiedTask {
+  id: string;
+  name: string;
+  isCompleted: boolean;
+  startOn?: Date;
+  dueOn?: Date;
+  assignee?: string;
+}
+
 export interface ITaskSet {
   [key: string]: IKanbanTask;
 }

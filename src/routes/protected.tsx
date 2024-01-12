@@ -1,14 +1,18 @@
-import { Outlet, RouteObject } from 'react-router-dom';
+import { Outlet, RouteObject, useLocation } from 'react-router-dom';
 
 import { FullScreenError } from '@/components/Error';
 import { AuthLayout } from '@/components/Layout';
+import { Dashboard } from '@/features/misc';
 import { ProfileRoutes } from '@/features/profile';
 import { ProjectRoutes } from '@/features/projects';
 import { WorkspaceRoutes } from '@/features/workspaces';
 
 const App = () => {
+  const location = useLocation();
+
   return (
     <AuthLayout>
+      {location.pathname === '/app' && <Dashboard />}
       <Outlet />
     </AuthLayout>
   );

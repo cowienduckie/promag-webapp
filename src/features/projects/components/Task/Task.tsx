@@ -225,8 +225,8 @@ const Task = (props: TaskProps) => {
                   label="Date Range"
                   name="dateRange"
                   initialValue={[
-                    task.startOn ? dayjs(task.startOn) : dayjs(),
-                    task.dueOn ? dayjs(task.dueOn) : dayjs()
+                    task.startOn ? dayjs(task.startOn) : undefined,
+                    task.dueOn ? dayjs(task.dueOn) : undefined
                   ]}
                 >
                   <RangePicker onOk={() => {}} />
@@ -235,7 +235,7 @@ const Task = (props: TaskProps) => {
                 <Form.Item
                   label="Due Date"
                   name="dueOn"
-                  initialValue={task.dueOn ? dayjs(task.dueOn) : dayjs()}
+                  initialValue={task.dueOn ? dayjs(task.dueOn) : undefined}
                 >
                   <DatePicker onOk={() => {}} />
                 </Form.Item>

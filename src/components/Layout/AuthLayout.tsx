@@ -86,8 +86,13 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       {!authenticated && <FullScreenLoading />}
       {authenticated && (
-        <Layout className={clsx('min-h-screen bg-blue-100')}>
-          <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <Layout className={clsx('h-screen bg-blue-100')}>
+          <Sider
+            className={''}
+            collapsible
+            collapsed={collapsed}
+            onCollapse={(value) => setCollapsed(value)}
+          >
             <Link to="/">
               <h1 className={clsx('my-5 text-center text-2xl font-bold text-white')}>
                 {!collapsed ? 'PROMAG' : 'PM'}
@@ -110,7 +115,7 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           </Sider>
           <Layout className={clsx('bg-inherit')}>
             <Content
-              className={clsx('border-1 m-5 rounded shadow-md')}
+              className={clsx('border-1 m-5 overflow-auto rounded shadow-md ')}
               style={{ background: colorBgContainer }}
             >
               {children}
