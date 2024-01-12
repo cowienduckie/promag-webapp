@@ -1,7 +1,9 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Modal } from 'antd';
+import { Button, Checkbox, DatePicker, DatePickerProps, Form, Input, Modal, Select } from 'antd';
+import { RangePickerProps } from 'antd/es/date-picker';
 import TextArea from 'antd/es/input/TextArea';
-import { memo, useContext, useState } from 'react';
+import dayjs from 'dayjs';
+import { memo, useContext, useEffect, useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
 import { useDisclosure } from '@/hooks/useDisclosure';
@@ -9,6 +11,8 @@ import { useDisclosure } from '@/hooks/useDisclosure';
 import { ProjectContext } from '../../contexts/project-context';
 import { IKanbanProject, IKanbanTask } from '../../types';
 import { Container } from '../Container';
+
+const { RangePicker } = DatePicker;
 
 type TaskProps = {
   task: IKanbanTask;
@@ -20,11 +24,30 @@ enum Action {
   EditTask = 'EDIT_TASK'
 }
 
+type FormValues =
+  | {
+      name: string;
+      notes?: string;
+      dueOn?: DatePickerProps['value'];
+      dateRange?: RangePickerProps['value'];
+      isCompleted: boolean;
+      assignee?: string;
+    }
+  | any;
+
 const Task = (props: TaskProps) => {
   const { task, index, ...otherProps } = props;
+  const [form] = Form.useForm();
   const { isOpen, open, close } = useDisclosure(false);
   const projectContext = useContext(ProjectContext);
   const [action, setAction] = useState<Action>(Action.ViewTask);
+  const [startDateIncluded, setStartDateIncluded] = useState(
+    task.startOn !== undefined && task.startOn !== null
+  );
+
+  useEffect(() => {
+    setStartDateIncluded(task.startOn !== undefined && task.startOn !== null);
+  }, []);
 
   const handleDeleteTask = () => {
     const columnId =
@@ -52,20 +75,20 @@ const Task = (props: TaskProps) => {
     close();
   };
 
-  const handleEditTask = (values: { name: string; description?: string }) => {
-    const updatedProject = {
-      ...projectContext.project,
-      tasks: {
-        ...projectContext.project.tasks,
-        [task.id]: {
-          ...task,
-          name: values.name,
-          description: values.description ?? ''
-        }
-      }
-    } as IKanbanProject;
+  const handleEditTask = (values: FormValues) => {
+    const updateTask: IKanbanTask = {
+      ...task,
+      name: values.name,
+      notes: values.notes,
+      startOn: startDateIncluded ? values.dateRange[0] : undefined,
+      dueOn: startDateIncluded ? values.dateRange[1] : values.dueOn,
+      isCompleted: values.isCompleted,
+      assignee: values.assignee
+    };
 
-    projectContext.setProject(updatedProject);
+    projectContext.updateTask(updateTask, projectContext.project.id);
+    setAction(Action.ViewTask);
+    close();
   };
 
   const handleMarkAsCompleted = () => {
@@ -75,12 +98,20 @@ const Task = (props: TaskProps) => {
         ...projectContext.project.tasks,
         [task.id]: {
           ...task,
-          isCompleted: !task.isCompleted
+          isCompleted: task.isCompleted ? false : true
         }
       }
     } as IKanbanProject;
     projectContext.setProject(updatedProject);
   };
+
+  const filterOption = (
+    input: string,
+    option?: {
+      label: string;
+      value: string;
+    }
+  ) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   return (
     <>
@@ -97,7 +128,11 @@ const Task = (props: TaskProps) => {
             <p onClick={open}>
               <strong>{task.name}</strong>
             </p>
-            <p className="mt-5">{task.assignee == '' ? 'Not yet assigned' : task.assignee}</p>
+            <p className="mt-5">
+              {task.assignee == ''
+                ? 'Not yet assigned'
+                : projectContext.workspace.members.find((mem) => mem.id == task.assignee)?.email}
+            </p>
             <Checkbox className="mt-3" onClick={handleMarkAsCompleted} checked={task.isCompleted}>
               Is Completed?
             </Checkbox>
@@ -147,6 +182,7 @@ const Task = (props: TaskProps) => {
         ) : (
           <>
             <Form
+              form={form}
               className="my-5"
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 16 }}
@@ -157,12 +193,65 @@ const Task = (props: TaskProps) => {
                 label="Name"
                 name="name"
                 rules={[{ required: true, message: 'Please input task name!' }]}
+                initialValue={task.name}
               >
-                <Input defaultValue={task.name} />
+                <Input />
               </Form.Item>
 
-              <Form.Item label="Description" name="description">
-                <TextArea rows={3} defaultValue={task.notes} />
+              <Form.Item
+                label="Is Completed?"
+                name="isCompleted"
+                initialValue={task.isCompleted}
+                valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
+
+              <Form.Item label="Assignee" name="assignee" initialValue={task.assignee}>
+                <Select
+                  showSearch
+                  placeholder="Select a assignee"
+                  optionFilterProp="children"
+                  filterOption={filterOption}
+                  options={projectContext.workspace.members.map((member) => ({
+                    label: member.email,
+                    value: member.id
+                  }))}
+                />
+              </Form.Item>
+
+              {startDateIncluded ? (
+                <Form.Item
+                  label="Date Range"
+                  name="dateRange"
+                  initialValue={[
+                    task.startOn ? dayjs(task.startOn) : dayjs(),
+                    task.dueOn ? dayjs(task.dueOn) : dayjs()
+                  ]}
+                >
+                  <RangePicker onOk={() => {}} />
+                </Form.Item>
+              ) : (
+                <Form.Item
+                  label="Due Date"
+                  name="dueOn"
+                  initialValue={task.dueOn ? dayjs(task.dueOn) : dayjs()}
+                >
+                  <DatePicker onOk={() => {}} />
+                </Form.Item>
+              )}
+
+              <Form.Item label="Start Date?">
+                <Checkbox
+                  defaultChecked={startDateIncluded}
+                  onChange={(e) => {
+                    setStartDateIncluded(e.target.checked);
+                  }}
+                />
+              </Form.Item>
+
+              <Form.Item label="Notes" name="notes" initialValue={task.notes}>
+                <TextArea rows={3} />
               </Form.Item>
 
               <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
@@ -175,15 +264,7 @@ const Task = (props: TaskProps) => {
                   Cancel
                 </Button>
 
-                <Button
-                  className="ml-5 mt-5 bg-green-500"
-                  type="primary"
-                  onClick={() => {
-                    setAction(Action.ViewTask);
-                    close();
-                  }}
-                  htmlType="submit"
-                >
+                <Button className="ml-5 mt-5 bg-green-500" type="primary" htmlType="submit">
                   Submit
                 </Button>
               </Form.Item>

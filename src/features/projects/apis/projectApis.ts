@@ -18,6 +18,7 @@ export const getProjects = (
               notes
               createdOn
               lastModifiedOn
+              workspaceId
           }
       }
   }`;
@@ -40,6 +41,7 @@ export const getProjectById = (projectId: string): Promise<IKanbanProject> => {
         createdOn
         lastModifiedOn
         columnOrder
+        workspaceId
     }
 }`;
 
@@ -70,7 +72,8 @@ export const createProject = (project: ICreateProjectDto): Promise<any> => {
       name: project.name,
       notes: project.notes,
       color: project.color,
-      dueDate: project.dueDate
+      dueDate: project.dueDate,
+      workspaceId: project.workspaceId
     }
   });
 };

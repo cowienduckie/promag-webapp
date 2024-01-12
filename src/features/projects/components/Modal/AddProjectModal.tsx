@@ -1,9 +1,12 @@
-import { Button, ColorPicker, DatePicker, DatePickerProps, Form, Input } from 'antd';
+import { Button, ColorPicker, DatePicker, DatePickerProps, Form, Input, Select } from 'antd';
 import { Color } from 'antd/es/color-picker';
 import TextArea from 'antd/es/input/TextArea';
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 
 import { ButtonModal } from '@/components/ButtonModal';
+import { getMyWorkspaces } from '@/features/workspaces/apis';
+import { IWorkspace } from '@/features/workspaces/types/IWorkspace';
 import { useDisclosure } from '@/hooks/useDisclosure';
 
 import { createProject } from '../../apis';
@@ -15,19 +18,28 @@ type FormValues =
       notes?: string;
       color: Color;
       dueDate?: DatePickerProps['value'];
+      workspaceId?: string;
     }
   | any;
 
 export const AddProjectModal = ({ onRefreshList }: { onRefreshList: () => void }) => {
   const [form] = Form.useForm();
   const { isOpen, open, close } = useDisclosure(false);
+  const [workspaces, setWorkspaces] = useState<IWorkspace[]>([]);
+
+  useEffect(() => {
+    getMyWorkspaces().then((res) => {
+      setWorkspaces([...res.ownedWorkspaces]);
+    });
+  }, []);
 
   const onFinishForm = async (values: FormValues) => {
     const newProject: ICreateProjectDto = {
       name: values.name,
       notes: values.notes,
       color: values.color?.toHexString() ?? '#000000',
-      dueDate: values.dueOn
+      dueDate: values.dueOn,
+      workspaceId: values.workspaceId
     };
 
     createProject(newProject).finally(() => {
@@ -40,6 +52,14 @@ export const AddProjectModal = ({ onRefreshList }: { onRefreshList: () => void }
   const onFinishFormFailed = (errorInfo: unknown) => {
     alert(`Failed: ${errorInfo}`);
   };
+
+  const filterOption = (
+    input: string,
+    option?: {
+      label: string;
+      value: string;
+    }
+  ) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   return (
     <ButtonModal
@@ -74,6 +94,19 @@ export const AddProjectModal = ({ onRefreshList }: { onRefreshList: () => void }
 
         <Form.Item label="Due Date" name="dueOn">
           <DatePicker onOk={() => {}} />
+        </Form.Item>
+
+        <Form.Item label="Workspace" name="workspaceId">
+          <Select
+            showSearch
+            placeholder="Select a workspace name"
+            optionFilterProp="children"
+            filterOption={filterOption}
+            options={workspaces.map((workspace) => ({
+              label: workspace.name,
+              value: workspace.id
+            }))}
+          />
         </Form.Item>
 
         <Form.Item label="Notes" name="notes">

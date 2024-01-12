@@ -1,8 +1,15 @@
 import { createContext, ReactNode, useCallback, useMemo, useReducer } from 'react';
 
-import { getProjectById, updateProject } from '../apis';
+import { IWorkspace } from '@/features/workspaces/types/IWorkspace';
+
+import { editTask, getProjectById, updateProject } from '../apis';
 import { createTask } from '../apis/taskApis';
-import { ADD_TASK, SAVE_PROJECT_CHANGES, SET_PROJECT } from '../common/project-context-actions';
+import {
+  ADD_TASK,
+  SAVE_PROJECT_CHANGES,
+  SET_PROJECT,
+  UPDATE_TASK
+} from '../common/project-context-actions';
 import { IKanbanProject, IKanbanTask } from '../types';
 import { ProjectState } from '../types/ProjectContext';
 
@@ -15,7 +22,15 @@ const initialState: ProjectState = {
     createdOn: new Date(Date.now()),
     tasks: {},
     columns: {},
-    columnOrder: []
+    columnOrder: [],
+    workspaceId: ''
+  },
+  workspace: {
+    id: '',
+    name: '',
+    ownerId: '',
+    members: [],
+    invitations: []
   },
   isProjectChanged: false,
   saveProjectChanges(): void {
@@ -27,6 +42,10 @@ const initialState: ProjectState = {
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addTask(task: IKanbanTask, projectId: string): void {
+    throw new Error('ProjectContext not yet initialized.');
+  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateTask(task: IKanbanTask, projectId: string): void {
     throw new Error('ProjectContext not yet initialized.');
   }
 };
@@ -44,6 +63,10 @@ type Action =
     }
   | {
       type: typeof ADD_TASK;
+      payload: IKanbanProject;
+    }
+  | {
+      type: typeof UPDATE_TASK;
       payload: IKanbanProject;
     };
 
@@ -73,6 +96,14 @@ const reducer = (state: ProjectState, action: Action): ProjectState => {
       };
     }
 
+    case UPDATE_TASK: {
+      return {
+        ...state,
+        isProjectChanged: false,
+        project: action.payload
+      };
+    }
+
     default:
       return state;
   }
@@ -81,13 +112,18 @@ const reducer = (state: ProjectState, action: Action): ProjectState => {
 export const ProjectContextProvider = (props: {
   children: ReactNode;
   initialProject: IKanbanProject;
+  workspace: IWorkspace;
 }) => {
-  const [state, dispatch] = useReducer(reducer, { ...initialState, project: props.initialProject });
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    project: props.initialProject,
+    workspace: props.workspace
+  });
 
   const setProject = useCallback((project: IKanbanProject) => {
     dispatch({
       type: SET_PROJECT,
-      payload: project
+      payload: { ...project }
     });
   }, []);
 
@@ -113,14 +149,26 @@ export const ProjectContextProvider = (props: {
     });
   }, []);
 
+  const updateTask = useCallback((task: IKanbanTask, projectId: string) => {
+    editTask(task, projectId).then(() => {
+      getProjectById(projectId).then((updatedProject) => {
+        dispatch({
+          type: UPDATE_TASK,
+          payload: updatedProject
+        });
+      });
+    });
+  }, []);
+
   const value: ProjectState = useMemo(
     () => ({
       ...state,
       setProject,
       saveProjectChanges,
-      addTask
+      addTask,
+      updateTask
     }),
-    [state, setProject, saveProjectChanges, addTask]
+    [state, setProject, saveProjectChanges, addTask, updateTask]
   );
 
   return <ProjectContext.Provider value={value}>{props.children}</ProjectContext.Provider>;

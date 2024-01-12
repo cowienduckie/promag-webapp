@@ -15,6 +15,7 @@ export interface ICreateProjectDto {
   notes?: string;
   color?: string;
   dueDate?: Date;
+  workspaceId?: string;
 }
 
 export interface IKanbanProject {
@@ -25,6 +26,7 @@ export interface IKanbanProject {
   dueDate?: Date;
   createdOn: Date;
   lastModifiedOn?: Date;
+  workspaceId: string;
 
   tasks: ITaskSet;
   columns: IColumnSet;

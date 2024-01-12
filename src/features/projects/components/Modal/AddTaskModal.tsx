@@ -23,6 +23,7 @@ type FormValues =
 export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
   const projectContext = useContext(ProjectContext);
 
+  const [form] = Form.useForm();
   const { isOpen, open, close } = useDisclosure(false);
   const [startDateIncluded, setStartDateIncluded] = useState(false);
 
@@ -43,6 +44,7 @@ export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
     };
 
     projectContext.addTask(newTask, projectContext.project.id);
+    form.resetFields();
     close();
   };
 
@@ -61,6 +63,7 @@ export const AddTaskModal = ({ column }: { column: IKanbanColumn }) => {
       footer={false}
     >
       <Form
+        form={form}
         className="my-5"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}
