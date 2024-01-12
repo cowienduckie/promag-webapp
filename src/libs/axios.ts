@@ -49,21 +49,3 @@ export const graphqlRequest = async <T>(
 
   return data[operationName] as T;
 };
-
-export const restPostRequest = async <T>(path: string, payload?: object): Promise<T> => {
-  const { data: responseData } = await axios.post(`/web-apigw/${path}`, payload);
-
-  const { data, errors } = responseData;
-
-  if (errors) {
-    const error: IError = {
-      status: '500',
-      statusText: 'Internal Server Error',
-      message: errors?.[0]?.message ?? 'An error occurred'
-    };
-
-    throw error;
-  }
-
-  return data as T;
-};

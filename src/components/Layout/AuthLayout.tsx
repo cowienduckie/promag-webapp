@@ -1,4 +1,10 @@
-import { DesktopOutlined, LogoutOutlined, PieChartOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  DesktopOutlined,
+  LogoutOutlined,
+  PieChartOutlined,
+  TeamOutlined,
+  UserOutlined
+} from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import clsx from 'clsx';
@@ -28,7 +34,8 @@ const useMenuData = () => {
 
   const menuItems: MenuItem[] = [
     getItem(<Link to="/app">Dashboard</Link>, '/app', <PieChartOutlined />),
-    getItem(<Link to="/app/projects">Projects</Link>, '/app/projects', <DesktopOutlined />)
+    getItem(<Link to="/app/projects">Projects</Link>, '/app/projects', <DesktopOutlined />),
+    getItem(<Link to="/app/workspaces">Workspaces</Link>, '/app/workspaces', <TeamOutlined />)
   ];
 
   const profileItems: MenuItem[] = [

@@ -46,7 +46,6 @@ export const AvatarUpload: React.FC = () => {
     axios
       .post('https://gw.promag.minhtrandev.com/personal/api/PersonalData/avatar', formData)
       .then((res) => {
-        console.log(res);
         setFileList([]);
       })
       .finally(() => {

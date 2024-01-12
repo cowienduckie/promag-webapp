@@ -7,6 +7,7 @@ export interface ISimplifiedProject {
   notes?: string;
   createdOn: Date;
   lastModifiedOn?: Date;
+  workspaceId: string;
 }
 
 export interface ICreateProjectDto {

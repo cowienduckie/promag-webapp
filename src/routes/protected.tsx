@@ -4,6 +4,7 @@ import { FullScreenError } from '@/components/Error';
 import { AuthLayout } from '@/components/Layout';
 import { ProfileRoutes } from '@/features/profile';
 import { ProjectRoutes } from '@/features/projects';
+import { WorkspaceRoutes } from '@/features/workspaces';
 
 const App = () => {
   return (
@@ -18,6 +19,6 @@ export const protectedRoutes: Array<RouteObject> = [
     path: '/app',
     element: <App />,
     errorElement: <FullScreenError />,
-    children: [{ ...ProjectRoutes }, { ...ProfileRoutes }]
+    children: [{ ...ProjectRoutes }, { ...ProfileRoutes }, { ...WorkspaceRoutes }]
   }
 ];
