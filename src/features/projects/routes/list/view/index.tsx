@@ -78,7 +78,7 @@ export const ProjectListPage = () => {
           </div>
         </>
       ) : (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <Empty className={clsx('my-3')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
       )}
     </div>
   );

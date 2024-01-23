@@ -5,7 +5,7 @@ import { ICreateProjectDto, IKanbanProject, ISimplifiedProject } from '../types'
 
 export const getProjects = (
   skip = 0,
-  take = 10
+  take = 9
 ): Promise<GetListQueryResponse<ISimplifiedProject>> => {
   const operationName = 'Projects';
   const query = `
