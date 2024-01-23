@@ -65,6 +65,7 @@ const AppContextProvider = (props: IContextProviderProps) => {
   // Handle context states
   const onUserLoaded = () => (user: User) => {
     Logger.info('User Loaded');
+
     dispatch({
       type: LOAD_LOGINUSER,
       payload: {

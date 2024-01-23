@@ -6,7 +6,7 @@ module.exports = {
     browser: true
   },
   parser: "@typescript-eslint/parser",
-  parserOptions: { ecmaVersion: "latest", sourceType: "module"},
+  parserOptions: { ecmaVersion: "latest", sourceType: "module" },
   ignorePatterns: ["node_modules/*", "dist/*", "**/*.css", "**/*.scss"],
   extends: ["eslint:recommended"],
   overrides: [
@@ -72,4 +72,4 @@ module.exports = {
       }
     }
   ]
-}
+};
