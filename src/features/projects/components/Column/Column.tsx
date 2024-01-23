@@ -29,9 +29,12 @@ const Column = (props: ColumnProps) => {
 
   return (
     <Draggable key={column.id} draggableId={column.id} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <Container
-          className={clsx('m-5 flex max-h-fit w-1/4 min-w-fit flex-col rounded bg-gray-100 p-5')}
+          className={clsx(
+            'mx-5 my-2 flex h-full w-1/3 flex-col rounded bg-gray-100 p-5',
+            snapshot.isDragging ? 'max-h-fit max-w-md' : ''
+          )}
           innerRef={provided.innerRef}
           {...provided.draggableProps}
         >
@@ -42,7 +45,7 @@ const Column = (props: ColumnProps) => {
             {(provided, snapshot) => (
               <TaskList
                 className={clsx(
-                  'flex flex-grow flex-col rounded p-3',
+                  'flex h-full flex-col overflow-auto rounded p-3',
                   snapshot.isDraggingOver ? 'bg-gray-400' : ''
                 )}
                 innerRef={provided.innerRef}

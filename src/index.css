@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ant-layout-sider-children,
+.ant-tabs,
+.ant-tabs-content,
+.ant-tabs-tabpane,
+.tab-panel {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+}

@@ -5,10 +5,10 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 import { ButtonModal } from '@/components/ButtonModal';
-import { getMyWorkspaces } from '@/features/workspaces/apis';
-import { IWorkspace } from '@/features/workspaces/types/IWorkspace';
 import { useDisclosure } from '@/hooks/useDisclosure';
 
+import { getMyWorkspaces } from '../../../workspaces/apis';
+import { IWorkspace } from '../../../workspaces/types/IWorkspace';
 import { createProject } from '../../apis';
 import { ICreateProjectDto } from '../../types';
 

@@ -8,7 +8,7 @@ export const OidcConfig: UserManagerSettings = {
   authority: '/authority',
   response_type: 'code',
   post_logout_redirect_uri: `${portalUrl}`,
-  scope: 'openid graphql-gateway personal-data portal communication master-data',
+  scope: 'openid email graphql-gateway personal-data portal communication master-data',
   silent_redirect_uri: `${portalUrl}/auth/silent_callback`,
   automaticSilentRenew: true,
   loadUserInfo: true

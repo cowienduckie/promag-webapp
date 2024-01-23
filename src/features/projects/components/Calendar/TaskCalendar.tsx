@@ -39,6 +39,7 @@ export const TaskCalendar = () => {
     const listData = Object.values(context.project.tasks).filter(
       (item) => item.dueOn && dayjs(item.dueOn).isSame(value, 'date')
     );
+
     return (
       <ul className="events">
         {listData.map((item) => (
@@ -56,5 +57,9 @@ export const TaskCalendar = () => {
     return info.originNode;
   };
 
-  return <Calendar className={'mx-5 my-2'} cellRender={cellRender} />;
+  return (
+    <div className={'overflow-auto'}>
+      <Calendar className={'mx-5 my-2'} cellRender={cellRender} />
+    </div>
+  );
 };

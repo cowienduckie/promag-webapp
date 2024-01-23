@@ -1,5 +1,5 @@
 import { ProjectOutlined } from '@ant-design/icons';
-import { Card, Pagination } from 'antd';
+import { Card, Empty, Pagination } from 'antd';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { NavLink, useLoaderData, useRevalidator } from 'react-router-dom';
@@ -59,21 +59,27 @@ export const ProjectListPage = () => {
         <h1 className={clsx('text-2xl font-bold')}>Your Projects</h1>
         <AddProjectModal onRefreshList={onRefreshList} />
       </div>
-      <CardDeck
-        className={clsx('my-3 h-full bg-gray-100 p-10')}
-        cards={projectCards}
-        colNum={3}
-        hGutter={24}
-      />
-      <div className={clsx('mt-3 flex flex-row-reverse')}>
-        <Pagination
-          total={totalCount}
-          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-          defaultCurrent={pageIndex}
-          defaultPageSize={pageSize}
-          onChange={onPaging}
-        />
-      </div>
+      {projects.length > 0 ? (
+        <>
+          <CardDeck
+            className={clsx('my-3 h-full bg-gray-100 p-10')}
+            cards={projectCards}
+            colNum={3}
+            hGutter={24}
+          />
+          <div className={clsx('mt-3 flex flex-row-reverse')}>
+            <Pagination
+              total={totalCount}
+              showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+              defaultCurrent={pageIndex}
+              defaultPageSize={pageSize}
+              onChange={onPaging}
+            />
+          </div>
+        </>
+      ) : (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      )}
     </div>
   );
 };

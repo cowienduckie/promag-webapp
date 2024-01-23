@@ -13,7 +13,11 @@ export const KanbanBoard = () => {
     <DragDropContext onDragEnd={onDragEnd}>
       <StrictModeDroppable droppableId="all-columns" direction="horizontal" type="column">
         {(provided) => (
-          <Container className="m-3 flex" innerRef={provided.innerRef} {...provided.droppableProps}>
+          <Container
+            className="flex h-full"
+            innerRef={provided.innerRef}
+            {...provided.droppableProps}
+          >
             {state.columnOrder.map((columnId, index) => {
               const column = state.columns[columnId];
               const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
