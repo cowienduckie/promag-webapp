@@ -36,6 +36,7 @@ export const InviteWorkspaceModal = ({
     <ButtonModal
       isModalOpen={isOpen}
       buttonTitle="Invite a friend"
+      buttonClassName="w-fit"
       modalTitle="Invite a friend to this workspace"
       handleOpen={open}
       handleCancel={close}

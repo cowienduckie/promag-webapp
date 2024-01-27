@@ -52,7 +52,7 @@ export const WorkspaceDetailPage = () => {
           className={clsx('mx-1')}
           itemLayout="horizontal"
           dataSource={workspace.members}
-          renderItem={(item: IProfile, index) => (
+          renderItem={(item: IProfile) => (
             <List.Item>
               <List.Item.Meta
                 avatar={<Avatar size="large" src={avatars[item.id]} />}
@@ -80,7 +80,7 @@ export const WorkspaceDetailPage = () => {
               className={clsx('mx-1')}
               itemLayout="horizontal"
               dataSource={workspace.invitations}
-              renderItem={(item: IProfile, index) => (
+              renderItem={(item: IProfile) => (
                 <List.Item>
                   <List.Item.Meta
                     avatar={<Avatar size="large" src={avatars[item.id]} />}
@@ -110,7 +110,7 @@ export const WorkspaceDetailPage = () => {
             className={clsx('mx-1')}
             itemLayout="horizontal"
             dataSource={projects}
-            renderItem={(item: ISimplifiedProject, index) => (
+            renderItem={(item: ISimplifiedProject) => (
               <List.Item>
                 <List.Item.Meta
                   avatar={<Avatar size="large" icon={<ProjectOutlined />} />}
